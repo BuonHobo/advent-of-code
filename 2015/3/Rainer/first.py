@@ -26,5 +26,7 @@ def main(input):
         pos = [xPos,yPos]
         visited += countHouse(pos,visitedPos)
     return visited
+    
 
-print(main(readFile('input.txt')))
+if __name__ == "__main__":
+    print(main(readFile('input.txt')))

@@ -1,3 +1,9 @@
+class gifter:
+    def __init__(self,x,y,visited):
+        self.x = x
+        self.y = y
+        self.visited = visited
+
 def readFile(textFile):
     return open(textFile,'r').readline()
 
@@ -8,20 +14,31 @@ def countHouse(currentPos,visitedHouse):
         visitedHouse.append(currentPos)
         return 1
 
+def updateGifter(move,list,Gifter):
+    for move in input:
+        if move == '>':
+            Gifter.x += 1
+        elif move == '<':
+            Gifter.x -= 1
+        elif move == '^':
+            Gifter.y += 1
+        elif move == 'v':
+            Gifter.y -= 1
+        pos = [Gifter.x,Gifter.y]
+        visited += countHouse(pos,visitedPos)
+
 def main(input):
-    visitedSanta = 1
-    visitedRobot = 0
-    xSanta,ySanta = 0,0
-    xRobot,yRobot = 0,0
+    santa = gifter(0,0,1)
+    robot = gifter(0,0,0)
     visitedPos = [[0,0]]
-    for ele in input:
-        if ele == '>':
+    for move in input:
+        if move == '>':
             xPos += 1
-        elif ele == '<':
+        elif move == '<':
             xPos -= 1
-        elif ele == '^':
+        elif move == '^':
             yPos += 1
-        elif ele == 'v':
+        elif move == 'v':
             yPos -= 1
         pos = [xPos,yPos]
         visited += countHouse(pos,visitedPos)
