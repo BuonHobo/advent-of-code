@@ -14,26 +14,6 @@ def countHouse(currentPos,visitedHouse):
         visitedHouse.append(currentPos)
         return 1
 
-def updateGifter(move,lst,santa,robot,turn):
-    Gifter = gifter(0,0,0)
-    if turn > 0:
-        Gifter = santa
-    else:
-        Gifter = robot
-    turn *= -1
-
-    for move in lst:
-        if move == '>':
-            Gifter.x += 1
-        elif move == '<':
-            Gifter.x -= 1
-        elif move == '^':
-            Gifter.y += 1
-        elif move == 'v':
-            Gifter.y -= 1
-        pos = [Gifter.x,Gifter.y]
-        Gifter.visited += countHouse(pos,lst)
-
 def main(input):
     santa = gifter(0,0,1)
     robot = gifter(0,0,0)
