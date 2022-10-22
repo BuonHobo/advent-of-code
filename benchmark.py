@@ -29,7 +29,7 @@ class Tentativo:
         def benched():
             return fun(inp)
 
-        times=10
+        times=20
         res= timeit.Timer(benched).timeit(times)
         #res=sum(res)/len(res)
         res/=times

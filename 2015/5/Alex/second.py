@@ -2,40 +2,36 @@ def main(input: str) -> int:
     count = 0
     for string in input.splitlines():
 
+        length = len(string)
         repeat = False
+
+        for i in range(2, length):
+            repeat = repeat or string[i] == string[i - 2]
+
+        if not repeat:
+            continue
+
+        coppie = set()
         doppio = False
-        doppie = {string[0]+string[1]}
+        vecchia = None
 
-        for index, prima in enumerate(string[:-2]):
-            if doppio and repeat:
-                break
+        for i in range(1, length):
+            coppia = string[i - 1] + string[i]
 
-            seconda = string[index + 1]
-            terza = string[index + 2]
+            if coppia == vecchia:
+                vecchia = None
+                continue
+            vecchia = coppia
 
-            repeat = repeat or prima == terza
+            doppio = doppio or coppia in coppie
+            coppie.add(coppia)
 
-            doppia = seconda + terza
-            if doppia in doppie:
-                if index+3<len(string):
-                        doppio =doppio or (prima!=terza and terza!=string[index+3])
-                else:
-                    doppio=doppio or prima!=terza
-            else:
-                doppie.add(doppia)
-
-        if repeat and doppio:
-            count += 1
+        count += doppio
 
     return count
 
-
 if __name__ == "__main__":
     with open("input.txt") as f:
-        string = f.read()
+        string = f.readlines()
 
-    print(main("qjhvhtzxzqqjkmpb"))
-    print(main("xxyxx"))
-    print(main("uurcxstgmygtbstg"))
-    print(main("ieodomkazucvgmuy"))
     print(main(string))
