@@ -12,16 +12,13 @@ def main(input: str) -> int:
 
             for index, letter in enumerate(string[:-1]):
                 
-                if letter in "aeiou":
-                    vowels += 1
+                vowels += letter in "aeiou"
                 
                 double = double or letter == string[index + 1]
 
-            if string[-1] in "aeiou":
-                vowels += 1
+            vowels += string[-1] in "aeiou"
 
-            if vowels >= 3 and double:
-                count += 1
+            count += vowels >= 3 and double
 
     return count
 
