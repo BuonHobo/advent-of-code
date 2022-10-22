@@ -89,7 +89,8 @@ for anno in anni:
     print(f"Anno {anno.anno}:")
     for esercizio in anno.esercizi:
         print(f"Esercizio {esercizio.numero}:")
+        inp=esercizio.tentativi[0].input
         for tentativo in esercizio.tentativi:
             print(f"Soluzione di {tentativo.nome}:")
-            print(f"First: {tentativo.benchfirst()}, Second: {tentativo.benchsecond()}")
+            print(f"First: {tentativo.benchfirst(inp)}, Second: {tentativo.benchsecond(inp)}")
             
