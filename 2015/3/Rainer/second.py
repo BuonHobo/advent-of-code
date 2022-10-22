@@ -14,8 +14,15 @@ def countHouse(currentPos,visitedHouse):
         visitedHouse.append(currentPos)
         return 1
 
-def updateGifter(move,list,Gifter):
-    for move in input:
+def updateGifter(move,lst,santa,robot,turn):
+    Gifter = gifter(0,0,0)
+    if turn > 0:
+        Gifter = santa
+    else:
+        Gifter = robot
+    turn *= -1
+
+    for move in lst:
         if move == '>':
             Gifter.x += 1
         elif move == '<':
@@ -25,21 +32,33 @@ def updateGifter(move,list,Gifter):
         elif move == 'v':
             Gifter.y -= 1
         pos = [Gifter.x,Gifter.y]
-        visited += countHouse(pos,visitedPos)
+        Gifter.visited += countHouse(pos,lst)
 
 def main(input):
     santa = gifter(0,0,1)
     robot = gifter(0,0,0)
-    visitedPos = [[0,0]]
-    for move in input:
-        if move == '>':
-            xPos += 1
-        elif move == '<':
-            xPos -= 1
-        elif move == '^':
-            yPos += 1
-        elif move == 'v':
-            yPos -= 1
-        pos = [xPos,yPos]
-        visited += countHouse(pos,visitedPos)
-    return visited
+    visitedHouse = [[0,0]]
+    turn = 1
+    for el in input:
+        Gifter = gifter(0,0,0)
+        if turn > 0:
+            Gifter = santa
+        else:
+            Gifter = robot
+        turn *= -1
+
+        if el == '>':
+            Gifter.x += 1
+        elif el == '<':
+            Gifter.x -= 1
+        elif el == '^':
+            Gifter.y += 1
+        elif el == 'v':
+            Gifter.y -= 1
+        pos = [Gifter.x,Gifter.y]
+        Gifter.visited += countHouse(pos,visitedHouse)
+
+    return santa.visited + robot.visited
+
+if __name__ == "__main__":
+    print(main(readFile('input.txt')))
