@@ -31,9 +31,7 @@ class Tentativo:
 
         times=20
         res= timeit.Timer(benched).timeit(times)
-        #res=sum(res)/len(res)
-        res/=times
-        return round(res,5)
+        return res/times
         
 
     def benchfirst(self,inp=None):
@@ -86,11 +84,10 @@ for anno in Path().iterdir():
     anni.append(year)
 
 for anno in anni:
-    print(f"Anno {anno.anno}:")
+    print(f"Anno {anno.anno}:\n")
     for esercizio in anno.esercizi:
-        print(f"Esercizio {esercizio.numero}:")
+        print(f"Esercizio {esercizio.numero}:\n")
         inp=esercizio.tentativi[0].input
         for tentativo in esercizio.tentativi:
-            print(f"Soluzione di {tentativo.nome}:")
-            print(f"First: {tentativo.benchfirst(inp)}, Second: {tentativo.benchsecond(inp)}")
-            
+            print("{:<15} [FIRST] {:.5f}  [SECOND] {:.5f}".format(tentativo.nome+":",tentativo.benchfirst(inp),tentativo.benchsecond(inp)))
+        print()
