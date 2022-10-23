@@ -18,14 +18,17 @@ class Esercizio:
 class Tentativo:
     def __init__(self, nome: str, first, second, input) -> None:
         self.nome: str = nome
-        self.first: function = first
+        self.first: function | None = first
         self.timefirst: float | None = None
-        self.second: function = second
+        self.second: function | None = second
         self.timesecond: float | None = None
         self.input: str = input
 
     @staticmethod
     def bench(fun, inp):
+        if fun is None:
+            return float("inf")
+
         def benched():
             return fun(inp)
 
@@ -65,15 +68,21 @@ for anno in Path().iterdir():
             ).open() as inp:  # Legge il file di input associato
                 input = inp.read()
 
-            modulo = SourceFileLoader(
-                "first", tentativo.joinpath("first.py").as_posix()
-            ).load_module()
-            first = modulo.main  # Importa la funzione main dell'esercizio 1
+            try:
+                modulo = SourceFileLoader(
+                    "first", tentativo.joinpath("first.py").as_posix()
+                ).load_module()
+                first = modulo.main  # Importa la funzione main dell'esercizio 1
+            except:
+                first = None
 
-            modulo = SourceFileLoader(
-                "second", tentativo.joinpath("second.py").as_posix()
-            ).load_module()
-            second = modulo.main  # Importa la funzione main dell'esercizio 2
+            try:
+                modulo = SourceFileLoader(
+                    "second", tentativo.joinpath("second.py").as_posix()
+                ).load_module()
+                second = modulo.main  # Importa la funzione main dell'esercizio 2
+            except:
+                second = None
 
             attempt = Tentativo(tentativo.name, first, second, input)
 
@@ -102,11 +111,11 @@ for anno in anni:
 
             curr_first = tentativo.benchfirst(inp)
 
-            print("[ {:.6f} ] ".format(curr_first), end="", flush=True)
+            print("[ {:^8} ] ".format("{:.6f}".format(curr_first)), end="", flush=True)
 
             curr_second = tentativo.benchsecond(inp)
 
-            print("[ {:.6f} ]".format(curr_second))
+            print("[ {:^8} ]".format("{:.6f}".format(curr_second)))
 
             if curr_first < best_first:
                 best_first = curr_first
