@@ -34,10 +34,7 @@ def main(input):
     for lst in bigList:
         command = splitCommand(lst.split())
         action(command[0],command[1][0],command[1][1],command[2][0],command[2][1],coordinates)
-    print(len(coordinates))
+    return len(coordinates)
         
-        
-
 if __name__ == "__main__":
     main(readFile('input.txt'))
-    #main("turn on 0,0 through 999,999")
