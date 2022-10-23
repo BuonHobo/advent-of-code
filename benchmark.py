@@ -16,39 +16,36 @@ class Esercizio:
 
 
 class Tentativo:
-    def __init__(self, nome: int) -> None:
-        self.nome: int = nome
-        self.first: function = None
-        self.timefirst:float=None
-        self.second: function = None
-        self.timesecond:float=None
-        self.input: str = None
+    def __init__(self, nome: str, first, second, input) -> None:
+        self.nome: str = nome
+        self.first: function = first
+        self.timefirst: float | None = None
+        self.second: function = second
+        self.timesecond: float | None = None
+        self.input: str = input
 
     @staticmethod
-    def bench(fun,inp):
+    def bench(fun, inp):
         def benched():
             return fun(inp)
 
-        times=20
-        res= timeit.Timer(benched).timeit(times)
-        return res/times
-        
+        times = 5
+        res = timeit.Timer(benched).timeit(times)
+        return res / times
 
-    def benchfirst(self,inp=None):
-        if inp is None: #Se non viene dato un input si usa quello del tentativo
-            inp=self.input
-        
-        self.timefirst=self.bench(self.first,inp)
+    def benchfirst(self, inp=None):
+        if inp is None:  # Se non viene dato un input si usa quello del tentativo
+            inp = self.input
+
+        self.timefirst = self.bench(self.first, inp)
         return self.timefirst
 
-    def benchsecond(self,inp=None):
-        if inp is None: #Se non viene dato un input si usa quello del tentativo
-            inp=self.input
-        
-        self.timesecond=self.bench(self.second,inp)
+    def benchsecond(self, inp=None):
+        if inp is None:  # Se non viene dato un input si usa quello del tentativo
+            inp = self.input
+
+        self.timesecond = self.bench(self.second, inp)
         return self.timesecond
-
-
 
 
 anni: list[Anno] = []
@@ -62,22 +59,23 @@ for anno in Path().iterdir():
         eser = Esercizio(int(esercizio.name))
 
         for tentativo in esercizio.iterdir():  # Alex, Rainer...
-            attempt = Tentativo(tentativo.name)
 
             with tentativo.joinpath(
                 "input.txt"
             ).open() as inp:  # Legge il file di input associato
-                attempt.input = inp.read()
+                input = inp.read()
 
             modulo = SourceFileLoader(
                 "first", tentativo.joinpath("first.py").as_posix()
             ).load_module()
-            attempt.first = modulo.main  # Importa la funzione main dell'esercizio 1
+            first = modulo.main  # Importa la funzione main dell'esercizio 1
 
             modulo = SourceFileLoader(
                 "second", tentativo.joinpath("second.py").as_posix()
             ).load_module()
-            attempt.second = modulo.main  # Importa la funzione main dell'esercizio 2
+            second = modulo.main  # Importa la funzione main dell'esercizio 2
+
+            attempt = Tentativo(tentativo.name, first, second, input)
 
             eser.tentativi.append(attempt)
         year.esercizi.append(eser)
@@ -87,25 +85,40 @@ print("\n[STARTING BENCHMARK]\n")
 for anno in anni:
     print(f"Anno {anno.anno}:\n")
     for esercizio in anno.esercizi:
-        print("{:<12}  [{:^10}] [{:^10}]".format(f"Esercizio {esercizio.numero}:","PART 1","PART 2"))
+        print(
+            "{:<12}  [{:^10}] [{:^10}]".format(
+                f"Esercizio {esercizio.numero}:", "PART 1", "PART 2"
+            )
+        )
 
-        inp=esercizio.tentativi[0].input
-        best_first,best_second= float("inf"),float("inf")
+        inp = esercizio.tentativi[0].input
+        best_first_name = None
+        best_second_name = None
+        best_first, best_second = float("inf"), float("inf")
 
         for tentativo in esercizio.tentativi:
 
-            curr_first= tentativo.benchfirst(inp)
-            curr_second=tentativo.benchsecond(inp)
+            print("{:>12}  ".format(tentativo.nome + ":"), end="", flush=True)
 
-            if curr_first<best_first:
-                best_first=curr_first
-                best_first_name=tentativo.nome
+            curr_first = tentativo.benchfirst(inp)
 
-            if curr_second<best_second:
-                best_second=curr_second
-                best_second_name=tentativo.nome
+            print("[ {:.6f} ] ".format(curr_first), end="", flush=True)
 
-            print("{:>12}  [ {:.6f} ] [ {:.6f} ]".format(tentativo.nome+":",curr_first,curr_second))
+            curr_second = tentativo.benchsecond(inp)
 
-        print("{:>12}  [{:^10}] [{:^10}]".format("Winners:",best_first_name,best_second_name))
+            print("[ {:.6f} ]".format(curr_second))
+
+            if curr_first < best_first:
+                best_first = curr_first
+                best_first_name = tentativo.nome
+
+            if curr_second < best_second:
+                best_second = curr_second
+                best_second_name = tentativo.nome
+
+        print(
+            "{:>12}  [{:^10}] [{:^10}]".format(
+                "Winners:", best_first_name, best_second_name
+            )
+        )
         print()
