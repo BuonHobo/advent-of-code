@@ -75,7 +75,7 @@ for anno in Path().iterdir():
             attempt.first = modulo.main  # Importa la funzione main dell'esercizio 1
 
             modulo = SourceFileLoader(
-                "first", tentativo.joinpath("second.py").as_posix()
+                "second", tentativo.joinpath("second.py").as_posix()
             ).load_module()
             attempt.second = modulo.main  # Importa la funzione main dell'esercizio 2
 
@@ -83,11 +83,29 @@ for anno in Path().iterdir():
         year.esercizi.append(eser)
     anni.append(year)
 
+print("\n[STARTING BENCHMARK]\n")
 for anno in anni:
     print(f"Anno {anno.anno}:\n")
     for esercizio in anno.esercizi:
         print(f"Esercizio {esercizio.numero}:\n")
+
         inp=esercizio.tentativi[0].input
+        best_first,best_second= float("inf"),float("inf")
+
         for tentativo in esercizio.tentativi:
-            print("{:<15} [FIRST] {:.5f}  [SECOND] {:.5f}".format(tentativo.nome+":",tentativo.benchfirst(inp),tentativo.benchsecond(inp)))
+
+            curr_first= tentativo.benchfirst(inp)
+            curr_second=tentativo.benchsecond(inp)
+
+            if curr_first<best_first:
+                best_first=curr_first
+                best_first_name=tentativo.nome
+
+            if curr_second<best_second:
+                best_second=curr_second
+                best_second_name=tentativo.nome
+
+            print("{:<15} [FIRST] {:.5f}  [SECOND] {:.5f}".format(tentativo.nome+":",curr_first,curr_second))
+
+        print("{:<15} [FIRST] {:>7}  [SECOND] {:>7}".format("Winners:",best_first_name,best_second_name))
         print()
