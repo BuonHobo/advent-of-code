@@ -3,11 +3,12 @@ def readFile(textFile):
 
 def action(move,x1,y1,x2,y2,openLightsCoord):
     for i in range(x1,x2 + 1):
-        for j in range(x2,y2 + 1):
+        for j in range(y1,y2 + 1):
             if move == "on":
                 openLightsCoord.add((i,j))
             elif move == "off":
-                openLightsCoord.remove((i,j))
+                if (i,j) in openLightsCoord:
+                    openLightsCoord.remove((i,j))
             elif move == "toggle":
                 if (i,j) in openLightsCoord:
                     openLightsCoord.remove((i,j))
