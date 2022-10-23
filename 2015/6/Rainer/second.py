@@ -1,34 +1,19 @@
+from numpy import mat
+
+
 def readFile(textFile):
     return open(textFile,'r').read()
 
-def on(i,j,openLightsCoord,brightness):
-    openLightsCoord.add((i,j))
-    if (i,j) in brightness:
-        brightness[(i,j)] += 1
-    else:
-        brightness[(i,j)] = 1
-
-def off(i,j,openLightsCoord,brightness):
-    if (i,j) in openLightsCoord:
-        openLightsCoord.remove((i,j))
-        if brightness.get((i,j)) > 0:
-            brightness[(i,j)] -= 1
-
-
-def action(move,x1,y1,x2,y2,openLightsCoord,brightness):
+def action(move,x1,y1,x2,y2,matrix):
     for i in range(x1,x2 + 1):
         for j in range(y1,y2 + 1):
             if move == "on":
-                on(i,j,openLightsCoord,brightness)
+                matrix[i][j] += 1
             elif move == "off":
-                off(i,j,openLightsCoord,brightness)
+                if matrix[i][j] > 0:
+                    matrix[i][j] -= 1
             elif move == "toggle":
-                openLightsCoord.add((i,j))
-                if (i,j) in brightness:
-                    brightness[(i,j)] += 2
-                else:
-                    brightness[(i,j)] = 2
-            
+                matrix[i][j] += 2
 
 def splitCommand(input):
     if input[0] == "turn":
@@ -44,21 +29,17 @@ def splitCommand(input):
     return [input[0],fst,snd]
 
 def main(input):
-    coordinates = set()
-    brightness = dict()
-    brightLevel = 0
-
+    totalBrightness = 0
+    matrix = [[0 for _ in range(1000)] for _ in range(1000)]
     bigList = input.splitlines()
     for lst in bigList:
         command = splitCommand(lst.split())
-        action(command[0],command[1][0],command[1][1],command[2][0],command[2][1],coordinates,brightness)
-
-    for bright in brightness.values():
-        brightLevel += bright
-    return brightLevel
+        action(command[0],command[1][0],command[1][1],command[2][0],command[2][1],matrix)
+    for i in range(0,1000):
+        for j in range(0,1000):
+            totalBrightness += matrix[i][j]
+    return totalBrightness
     
         
 if __name__ == "__main__":
-    #print(main(readFile('input.txt')))
-    print(main("turn on 0,0 through 0,0"))
-    print(main("toggle 0,0 through 999,999"))
+    main(readFile('input.txt'))
