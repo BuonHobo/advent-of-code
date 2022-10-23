@@ -87,9 +87,9 @@ print("\n[STARTING BENCHMARK]\n")
 for anno in anni:
     print(f"Anno {anno.anno}:\n")
     for esercizio in anno.esercizi:
-        print(f"Esercizio {esercizio.numero}:\n")
+        print("{:<12}  [{:^10}] [{:^10}]".format(f"Esercizio {esercizio.numero}:","PART 1","PART 2"))
 
-        inp=esercizio.tentativi[0].input
+        inp=esercizio.tentativi[1].input
         best_first,best_second= float("inf"),float("inf")
 
         for tentativo in esercizio.tentativi:
@@ -105,7 +105,7 @@ for anno in anni:
                 best_second=curr_second
                 best_second_name=tentativo.nome
 
-            print("{:<15} [FIRST] {:.5f}  [SECOND] {:.5f}".format(tentativo.nome+":",curr_first,curr_second))
+            print("{:>12}  [ {:.6f} ] [ {:.6f} ]".format(tentativo.nome+":",curr_first,curr_second))
 
-        print("{:<15} [FIRST] {:>7}  [SECOND] {:>7}".format("Winners:",best_first_name,best_second_name))
+        print("{:>12}  [{:^10}] [{:^10}]".format("Winners:",best_first_name,best_second_name))
         print()
