@@ -89,7 +89,7 @@ for anno in anni:
     for esercizio in anno.esercizi:
         print("{:<12}  [{:^10}] [{:^10}]".format(f"Esercizio {esercizio.numero}:","PART 1","PART 2"))
 
-        inp=esercizio.tentativi[1].input
+        inp=esercizio.tentativi[0].input
         best_first,best_second= float("inf"),float("inf")
 
         for tentativo in esercizio.tentativi:
