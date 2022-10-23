@@ -30,6 +30,7 @@ def splitCommand(input):
 
 def main(input):
     coordinates = set()
+
     bigList = input.splitlines()
     for lst in bigList:
         command = splitCommand(lst.split())
