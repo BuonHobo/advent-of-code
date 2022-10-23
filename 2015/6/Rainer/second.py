@@ -1,6 +1,3 @@
-from numpy import mat
-
-
 def readFile(textFile):
     return open(textFile,'r').read()
 
