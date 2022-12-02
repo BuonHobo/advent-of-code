@@ -1,26 +1,30 @@
 
 [STARTING BENCHMARK]
 
-Anno 2015:
-
-Esercizio 3:  [  PART 1  ] [  PART 2  ]
-       Alex:  [ 0.002095 ] [ 0.002455 ]
-     Rainer:  [ 0.295054 ] [ 0.309745 ]
-    Winners:  [   Alex   ] [   Alex   ]
-
-Esercizio 5:  [  PART 1  ] [  PART 2  ]
-       Alex:  [ 0.002769 ] [ 0.004213 ]
-     Rainer:  [ 0.007511 ] [ 0.019157 ]
-    Winners:  [   Alex   ] [   Alex   ]
-
-Esercizio 6:  [  PART 1  ] [  PART 2  ]
-       Alex:  [ 2.883197 ] [ 3.012984 ]
-     Rainer:  [ 9.472332 ] [ 2.266652 ]
-    Winners:  [   Alex   ] [  Rainer  ]
-
 Anno 2022:
 
 Esercizio 1:  [  PART 1  ] [  PART 2  ]
-       Alex:  [ 0.000453 ] [ 0.000472 ]
+       Alex:  [ 0.000373 ] [ 0.000390 ]
     Winners:  [   Alex   ] [   Alex   ]
+
+Esercizio 2:  [  PART 1  ] [  PART 2  ]
+       Alex:  [ 0.000845 ] [ 0.000575 ]
+    Winners:  [   Alex   ] [   Alex   ]
+
+Anno 2015:
+
+Esercizio 3:  [  PART 1  ] [  PART 2  ]
+       Alex:  [ 0.001072 ] [ 0.001181 ]
+     Rainer:  [ 0.156169 ] [ 0.163996 ]
+    Winners:  [   Alex   ] [   Alex   ]
+
+Esercizio 5:  [  PART 1  ] [  PART 2  ]
+       Alex:  [ 0.001353 ] [ 0.001896 ]
+     Rainer:  [ 0.003720 ] [ 0.009012 ]
+    Winners:  [   Alex   ] [   Alex   ]
+
+Esercizio 6:  [  PART 1  ] [  PART 2  ]
+       Alex:  [ 1.411210 ] [ 2.380959 ]
+     Rainer:  [ 4.798445 ] [ 1.617842 ]
+    Winners:  [   Alex   ] [  Rainer  ]
 

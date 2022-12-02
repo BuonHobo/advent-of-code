@@ -32,7 +32,7 @@ class Tentativo:
         def benched():
             return fun(inp)
 
-        times = 5
+        times = 3
         res = timeit.Timer(benched).timeit(times)
         return res / times
 
