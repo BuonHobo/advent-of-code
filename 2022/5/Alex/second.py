@@ -15,7 +15,7 @@ def parse_initial(initial: str) -> list[list[str]]:
     return list(map(lambda y: list(filter(lambda x: x != " ", y)), verticals))
 
 
-def parse_moves(moves: str) -> list[tuple[int]]:
+def parse_moves(moves: str) -> list[tuple[int, int, int]]:
     result = []
     for move in moves.splitlines():
         move = move.split()
@@ -31,7 +31,7 @@ def main(input: str) -> str:
 
     for mov, frm, to in moves:
         initial[to - 1].extend(initial[frm - 1][-mov:])
-        initial[frm - 1]=initial[frm - 1][0:-mov]
+        initial[frm - 1] = initial[frm - 1][0:-mov]
 
     res = ""
     for l in initial:
