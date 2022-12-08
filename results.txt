@@ -4,39 +4,51 @@
 Anno 2022:
 
 Esercizio 1:  [  PART 1  ] [  PART 2  ]
-       Alex:  [ 0.000382 ] [ 0.000393 ]
+       Alex:  [ 0.000392 ] [ 0.000411 ]
     Winners:  [   Alex   ] [   Alex   ]
 
 Esercizio 2:  [  PART 1  ] [  PART 2  ]
-       Alex:  [ 0.000920 ] [ 0.000595 ]
+       Alex:  [ 0.000849 ] [ 0.000580 ]
     Winners:  [   Alex   ] [   Alex   ]
 
 Esercizio 3:  [  PART 1  ] [  PART 2  ]
-       Alex:  [ 0.000557 ] [ 0.000477 ]
+       Alex:  [ 0.000561 ] [ 0.000455 ]
     Winners:  [   Alex   ] [   Alex   ]
 
 Esercizio 4:  [  PART 1  ] [  PART 2  ]
-       Alex:  [ 0.001766 ] [ 0.001697 ]
+       Alex:  [ 0.001699 ] [ 0.001707 ]
     Winners:  [   Alex   ] [   Alex   ]
 
 Esercizio 5:  [  PART 1  ] [  PART 2  ]
-       Alex:  [ 0.000587 ] [ 0.000497 ]
+       Alex:  [ 0.000571 ] [ 0.000490 ]
+    Winners:  [   Alex   ] [   Alex   ]
+
+Esercizio 8:  [  PART 1  ] [  PART 2  ]
+       Alex:  [ 0.014641 ] [ 0.016303 ]
+    Winners:  [   Alex   ] [   Alex   ]
+
+Esercizio 6:  [  PART 1  ] [  PART 2  ]
+       Alex:  [ 0.000426 ] [ 0.001034 ]
+    Winners:  [   Alex   ] [   Alex   ]
+
+Esercizio 7:  [  PART 1  ] [  PART 2  ]
+       Alex:  [ 0.001102 ] [ 0.001158 ]
     Winners:  [   Alex   ] [   Alex   ]
 
 Anno 2015:
 
 Esercizio 3:  [  PART 1  ] [  PART 2  ]
-       Alex:  [ 0.001060 ] [ 0.001183 ]
-     Rainer:  [ 0.160292 ] [ 0.174438 ]
+       Alex:  [ 0.001043 ] [ 0.001174 ]
+     Rainer:  [ 0.160474 ] [ 0.171634 ]
     Winners:  [   Alex   ] [   Alex   ]
 
 Esercizio 5:  [  PART 1  ] [  PART 2  ]
-       Alex:  [ 0.001354 ] [ 0.002043 ]
-     Rainer:  [ 0.003741 ] [ 0.009228 ]
+       Alex:  [ 0.001338 ] [ 0.001906 ]
+     Rainer:  [ 0.003695 ] [ 0.009060 ]
     Winners:  [   Alex   ] [   Alex   ]
 
 Esercizio 6:  [  PART 1  ] [  PART 2  ]
-       Alex:  [ 1.491932 ] [ 2.437093 ]
-     Rainer:  [ 5.072250 ] [ 1.693867 ]
+       Alex:  [ 1.447571 ] [ 2.489974 ]
+     Rainer:  [ 5.004056 ] [ 1.705875 ]
     Winners:  [   Alex   ] [  Rainer  ]
 
