@@ -101,8 +101,8 @@ for anno in anni:
         )
 
         inp = esercizio.tentativi[0].input
-        best_first_name = None
-        best_second_name = None
+        best_first_name = "None"
+        best_second_name = "None"
         best_first, best_second = float("inf"), float("inf")
 
         for tentativo in esercizio.tentativi:
