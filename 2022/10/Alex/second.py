@@ -7,7 +7,7 @@ def parse_instruction(instruction:str):
 		d_x=int(instruction[5:])
 		return [0,d_x]
 
-def main(input:str)->int:
+def main(input:str):
 	clock=0
 	x_register=1
 	pixels=[["" for _ in range(40)] for _ in range(6)]
