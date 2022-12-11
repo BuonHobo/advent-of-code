@@ -95,7 +95,7 @@ for anno in anni:
     print(f"Anno {anno.anno}:\n")
     for esercizio in anno.esercizi:
         print(
-            "{:<12}  [{:^10}] [{:^10}]".format(
+            "{:<13}  [{:^10}] [{:^10}]".format(
                 f"Esercizio {esercizio.numero}:", "PART 1", "PART 2"
             )
         )
@@ -107,7 +107,7 @@ for anno in anni:
 
         for tentativo in esercizio.tentativi:
 
-            print("{:>12}  ".format(tentativo.nome + ":"), end="", flush=True)
+            print("{:>13}  ".format(tentativo.nome + ":"), end="", flush=True)
 
             curr_first = tentativo.benchfirst(inp)
 
@@ -126,7 +126,7 @@ for anno in anni:
                 best_second_name = tentativo.nome
 
         print(
-            "{:>12}  [{:^10}] [{:^10}]".format(
+            "{:>13}  [{:^10}] [{:^10}]".format(
                 "Winners:", best_first_name, best_second_name
             )
         )
