@@ -25,12 +25,11 @@ class monkey:
 
     def throw_items(self) -> map:
         """returns (worry,target)"""
-        worries = map(self.inspect_item, self.items)
         return map(
             lambda worry: (worry, self.target[0])
             if worry % self.test == 0
             else (worry, self.target[1]),
-            worries,
+            map(self.inspect_item, self.items)
         )
 
 
@@ -67,11 +66,11 @@ def parse_monkey(string: str) -> monkey:
 
 
 def main(input: str) -> int:
-    monkeys = list(map(parse_monkey, input.split("\n\n")))
+    monkeys = tuple(map(parse_monkey, input.split("\n\n")))
 
     divisibility = 1
-    for num in map(lambda monke: monke.test, monkeys):
-        divisibility *= num
+    for monke in monkeys:
+        divisibility *= monke.test
 
     for monkey in monkeys:
         monkey.div = divisibility
