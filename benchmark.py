@@ -95,7 +95,7 @@ for anno in anni:
     print(f"Anno {anno.anno}:\n")
     for esercizio in anno.esercizi:
         print(
-            "{:<13}  [{:^10}] [{:^10}]".format(
+            "{:>13}  [{:^10}] [{:^10}]".format(
                 f"Esercizio {esercizio.numero}:", "PART 1", "PART 2"
             )
         )
