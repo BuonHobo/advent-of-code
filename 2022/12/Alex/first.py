@@ -2,17 +2,27 @@ import itertools
 
 
 def main(input: str) -> int:
-    input: list[list[int]] = [
-        [
-            ord(char if char not in "ES" else ("a" if char == "S" else "z"))
-            for char in line
-        ]
-        for line in input.splitlines()
-    ]
 
-    h, w = len(input), len(input[0])
+    data: list[list[int]] = []
+    start=end=(0,0)
 
-    def neighbours(i, j):
+    for i, line in enumerate(input.splitlines()):
+        buffer: list[int] = []
+        for j, char in enumerate(line):
+            if char == "S":
+                start = (i, j)
+                buffer.append(ord("a"))
+            elif char == "E":
+                end = (i, j)
+                buffer.append(ord("z"))
+            else:
+                buffer.append(ord(char))
+        data.append(buffer)
+
+    h, w = len(data), len(data[0])
+
+    def neighbours(cell:tuple[int,int]):
+        i, j = cell
         res = []
 
         if i > 0:
@@ -26,17 +36,17 @@ def main(input: str) -> int:
 
         return res
 
-    def get_num(i, j):
-        return input[i][j]
+    def get_num(point):
+        return data[point[0]][point[1]]
 
-    start = (20, 0)
-    end = (20, 148)
+    def is_accessible(src:tuple[int,int],dest:tuple[int,int]):
+        return get_num(dest)-get_num(src)<=1
 
     visited: set[tuple[int, int]] = {start}
     visit_queue: list[tuple[int, int]] = list(
         filter(
-            lambda x: get_num(*x) - get_num(*start) <= 1,
-            neighbours(*start),
+            lambda x: is_accessible(start,x),
+            neighbours(start),
         )
     )
 
@@ -46,7 +56,7 @@ def main(input: str) -> int:
     while not finish:
         count += 1
         new_visit_queue = []
-        
+
         while len(visit_queue) > 0:
             current = visit_queue.pop()
             if current == end:
@@ -58,8 +68,8 @@ def main(input: str) -> int:
                     lambda x: x not in visit_queue
                     and x not in new_visit_queue
                     and x not in visited
-                    and get_num(*x) - get_num(*current) <= 1,
-                    neighbours(*current),
+                    and is_accessible(current,x),
+                    neighbours(current),
                 )
             )
             visited.add(current)

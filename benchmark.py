@@ -92,11 +92,11 @@ for anno in Path().iterdir():
 
 print("\n[STARTING BENCHMARK]\n")
 for anno in anni:
-    print(f"Anno {anno.anno}:\n")
+    print(f"Year {anno.anno}:\n")
     for esercizio in anno.esercizi:
         print(
             "{:>13}  [{:^10}] [{:^10}]".format(
-                f"Esercizio {esercizio.numero}:", "PART 1", "PART 2"
+                f"Day {esercizio.numero}:", "PART 1", "PART 2"
             )
         )
 

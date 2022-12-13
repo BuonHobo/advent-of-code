@@ -1,64 +1,57 @@
+
 [STARTING BENCHMARK]
 
-Anno 2022:
+Year 2022:
 
- Esercizio 1:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000376 ] [ 0.000385 ]
+       Day 1:  [  PART 1  ] [  PART 2  ]
+        Alex:  [ 0.000394 ] [ 0.000399 ]
      Winners:  [   Alex   ] [   Alex   ]
 
- Esercizio 2:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000863 ] [ 0.000593 ]
+       Day 2:  [  PART 1  ] [  PART 2  ]
+        Alex:  [ 0.000843 ] [ 0.000615 ]
      Winners:  [   Alex   ] [   Alex   ]
 
- Esercizio 3:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000573 ] [ 0.000456 ]
+       Day 3:  [  PART 1  ] [  PART 2  ]
+        Alex:  [ 0.000558 ] [ 0.000454 ]
      Winners:  [   Alex   ] [   Alex   ]
 
- Esercizio 4:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.001729 ] [ 0.001742 ]
+       Day 4:  [  PART 1  ] [  PART 2  ]
+        Alex:  [ 0.001695 ] [ 0.001683 ]
      Winners:  [   Alex   ] [   Alex   ]
 
- Esercizio 5:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000586 ] [ 0.000483 ]
+       Day 5:  [  PART 1  ] [  PART 2  ]
+        Alex:  [ 0.000578 ] [ 0.000483 ]
      Winners:  [   Alex   ] [   Alex   ]
 
- Esercizio 8:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.014336 ] [ 0.015836 ]
+       Day 8:  [  PART 1  ] [  PART 2  ]
+        Alex:  [ 0.014247 ] [ 0.016056 ]
      Winners:  [   Alex   ] [   Alex   ]
 
- Esercizio 6:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000429 ] [ 0.001028 ]
+       Day 6:  [  PART 1  ] [  PART 2  ]
+        Alex:  [ 0.000426 ] [ 0.001024 ]
      Winners:  [   Alex   ] [   Alex   ]
 
- Esercizio 7:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.001103 ] [ 0.001198 ]
+       Day 7:  [  PART 1  ] [  PART 2  ]
+        Alex:  [ 0.001086 ] [ 0.001151 ]
      Winners:  [   Alex   ] [   Alex   ]
 
- Esercizio 9:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.004608 ] [ 0.024639 ]
+       Day 9:  [  PART 1  ] [  PART 2  ]
+        Alex:  [ 0.004471 ] [ 0.024090 ]
      Winners:  [   Alex   ] [   Alex   ]
 
-Esercizio 10:  [  PART 1  ] [  PART 2  ]
+      Day 10:  [  PART 1  ] [  PART 2  ]
         Alex:  [ 0.000046 ] [ 0.000103 ]
      Winners:  [   Alex   ] [   Alex   ]
 
-Esercizio 11:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000811 ] [ 0.308317 ]
+      Day 11:  [  PART 1  ] [  PART 2  ]
+        Alex:  [ 0.000819 ] [ 0.304553 ]
      Winners:  [   Alex   ] [   Alex   ]
 
-Anno 2015:
-
- Esercizio 3:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.001037 ] [ 0.001163 ]
-      Rainer:  [ 0.159238 ] [ 0.167089 ]
+      Day 12:  [  PART 1  ] [  PART 2  ]
+        Alex:  [ 0.019855 ] [ 0.011266 ]
      Winners:  [   Alex   ] [   Alex   ]
 
- Esercizio 5:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.001308 ] [ 0.001888 ]
-      Rainer:  [ 0.003666 ] [ 0.009023 ]
+      Day 13:  [  PART 1  ] [  PART 2  ]
+        Alex:  [ 0.012812 ] [ 0.015281 ]
      Winners:  [   Alex   ] [   Alex   ]
 
- Esercizio 6:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 1.443102 ] [ 2.446217 ]
-      Rainer:  [ 5.195782 ] [ 1.681348 ]
-     Winners:  [   Alex   ] [  Rainer  ]

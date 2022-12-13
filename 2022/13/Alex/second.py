@@ -29,16 +29,16 @@ def compare(primo: int | list, secondo: int | list) -> int:
 
 def main(input: str) -> int:
     i = 1
-    result = 0
-    for packet in input.split("\n\n"):
-        left, right = packet.split("\n")
-        left = eval(left)
-        right = eval(right)
-        if compare(left, right) <= 0:
-            result += i
-        i += 1
+    j = 2
+    for pair in input.split("\n\n"):
+        for packet in pair.split("\n"):
+            packet = eval(packet)
+            if compare(packet, [[6]]) <= 0:
+                j += 1
+                if compare(packet, [[2]]) <= 0:
+                    i += 1
 
-    return result
+    return i * j
 
 
 if __name__ == "__main__":

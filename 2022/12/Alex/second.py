@@ -2,26 +2,27 @@ import itertools
 
 
 def main(input: str) -> int:
-    input=input.splitlines()
-    h, w = len(input), len(input[0])
 
-    for i in range(h):
-        for j in range(w):
-            if input[i][j] == "E":
-                end = (i, j)
-                break
-        else: continue
-        break
+    data: list[list[int]] = []
+    start=(0,0)
+    end=ord('a')
 
-    input: list[list[int]] = [
-        [
-            ord(char if char not in "ES" else ("a" if char == "S" else "z"))
-            for char in line
-        ]
-        for line in input
-    ]
+    for i, line in enumerate(input.splitlines()):
+        buffer: list[int] = []
+        for j, char in enumerate(line):
+            if char == "S":
+                buffer.append(ord("a"))
+            elif char == "E":
+                start = (i, j)
+                buffer.append(ord("z"))
+            else:
+                buffer.append(ord(char))
+        data.append(buffer)
 
-    def neighbours(i, j):
+    h, w = len(data), len(data[0])
+
+    def neighbours(cell:tuple[int,int]):
+        i, j = cell
         res = []
 
         if i > 0:
@@ -35,59 +36,47 @@ def main(input: str) -> int:
 
         return res
 
-    def get_num(i, j):
-        return input[i][j]
+    def get_num(point):
+        return data[point[0]][point[1]]
 
-    start = set()
-    for i in range(h):
-        for j in range(w):
-            if input[i][j] == ord("a"):
-                start.add((i, j))
+    def is_accessible(src:tuple[int,int],dest:tuple[int,int]):
+        return get_num(src)-get_num(dest)<=1
 
-    end = (20, 148)
-
-    min = 1000000
-    while len(start) != 0:
-        cell = start.pop()
-        visited: set[tuple[int, int]] = {cell}
-        visit_queue: list[tuple[int, int]] = list(
-            filter(
-                lambda x: get_num(*x) - get_num(*cell) <= 1,
-                neighbours(*cell),
-            )
+    visited: set[tuple[int, int]] = {start}
+    visit_queue: list[tuple[int, int]] = list(
+        filter(
+            lambda x: is_accessible(start,x),
+            neighbours(start),
         )
+    )
 
-        finish: bool = False
-        count = 0
-        while not finish and len(visit_queue) != 0:
-            count += 1
-            new_visit_queue = []
+    finish: bool = False
+    count:int = 0
 
-            while len(visit_queue) > 0:
-                current = visit_queue.pop()
-                if current == end:
-                    finish = True
-                    break
+    while not finish:
+        count += 1
+        new_visit_queue = []
 
-                new_visit_queue.extend(
-                    filter(
-                        lambda x: x not in visit_queue
-                        and x not in new_visit_queue
-                        and x not in visited
-                        and get_num(*x) - get_num(*current) <= 1,
-                        neighbours(*current),
-                    )
+        while len(visit_queue) > 0:
+            current = visit_queue.pop()
+            if get_num(current) == end:
+                finish = True
+                break
+
+            new_visit_queue.extend(
+                filter(
+                    lambda x: x not in visit_queue
+                    and x not in new_visit_queue
+                    and x not in visited
+                    and is_accessible(current,x),
+                    neighbours(current),
                 )
-                visited.add(current)
+            )
+            visited.add(current)
 
-            visit_queue = new_visit_queue
-        if finish:
-            if count < min:
-                min = count
-        else:
-            start.difference_update(visited)
+        visit_queue = new_visit_queue
 
-    return min
+    return count
 
 
 if __name__ == "__main__":
