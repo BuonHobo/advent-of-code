@@ -33,16 +33,6 @@ def parse_cave(input):
     return cave, max
 
 
-def stampa(cave):
-    for i in range(11):
-        for j in range(494, 504):
-            if (j, i) in cave:
-                print("o", end="")
-            else:
-                print(".", end="")
-        print()
-
-
 def main(input):
     cave, max = parse_cave(input)
     max = max + 2
@@ -51,26 +41,23 @@ def main(input):
         return (x, y) not in cave
 
     count = 0
-
-    sand: list[tuple[int, int]] = [(500, 0)]
     while True:
+        sandx, sandy = 500, 0
         while True:
-            x,y=sand[-1]
-            if y == max - 1:
+            if sandy == max - 1:
                 return count
 
-            if is_free(x, y + 1):  # down
-                sand.append((x, y + 1))
+            if is_free(sandx, sandy + 1):  # down
+                sandy += 1
 
-            elif is_free(x - 1, y + 1):  # left
-                sand.append((x - 1, y + 1))
+            elif is_free(sandx - 1, sandy + 1):  # left
+                sandx -= 1
 
-            elif is_free(x + 1, y + 1):  # right
-                sand.append((x + 1, y + 1))
+            elif is_free(sandx + 1, sandy + 1):  # right
+                sandx += 1
 
             else:  # stopping here
-                cave.add((x,y))
-                sand.pop()
+                cave.add((sandx, sandy))
                 break
         count += 1
 

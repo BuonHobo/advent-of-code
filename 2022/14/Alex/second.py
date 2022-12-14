@@ -2,15 +2,16 @@ import itertools
 
 
 def parse_cave(input):
-    cave = set()
+    cave:dict[int,set[int]] = {} # {x1: {y1,y2,y3}}
     max = 0
 
     for line in input.splitlines():
-        prec_ver = None
-        prec_hor = None
+        prec_ver = 0
+        prec_hor = 0
+        flag = False
         for pair in line.split(" -> "):
             ver, hor = map(int, pair.split(","))
-            if prec_ver is not None:
+            if flag:
                 if ver > prec_ver:
                     punti = ((y, hor) for y in range(prec_ver, ver + 1))
                 elif ver < prec_ver:
@@ -24,39 +25,48 @@ def parse_cave(input):
             else:
                 prec_hor = hor
                 prec_ver = ver
+                flag = True
                 continue
 
             for v, h in punti:
                 if h > max:
                     max = h
-                cave.add((v, h))
+                if h not in cave:
+                    cave[h]=set()
+
+                cave[h].add(v)
+                    
     return cave, max
 
+def stampa(linea):
+    for i in range(485,516):
+        if i in linea:
+            print("o",end="")
+        else:
+            print(".",end="")
+    print()
 
 def main(input):
     cave, max = parse_cave(input)
     max = max + 2
 
-    def is_free(x, y):
-        return (y < max) and (x, y) not in cave
+    step=1
+    count=0
+    current:set[int]={500}
+    
+    while step<=max:
+        attempt:set[int]=set()
+        count+=len(current)
+        for x in current:
+            attempt.add(x)
+            attempt.add(x-1)
+            attempt.add(x+1)
+        if step in cave:
+            attempt.difference_update(cave[step])
 
-    count = 0
-    while is_free(500,0):
-        count += 1
-        sandx, sandy = 500, 0
-        while True:
-            if is_free(sandx, sandy + 1):  # down
-                sandy += 1
-
-            elif is_free(sandx - 1, sandy + 1):  # left
-                sandx -= 1
-
-            elif is_free(sandx + 1, sandy + 1):  # right
-                sandx += 1
-
-            else:  # stopping here
-                cave.add((sandx, sandy))
-                break
+        current=attempt
+        step+=1
+    
     return count
 
 
