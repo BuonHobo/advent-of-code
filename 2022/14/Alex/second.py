@@ -1,70 +1,61 @@
-        sandx,sandy=500,0
 import itertools
 
 
-def parse_cave(input:str)->dict[int,list[int]]:
-    cave:dict[int,list[int]]={}
-
+def parse_cave(input):
+    cave = set()
+    max = 0
 
     for line in input.splitlines():
-        prec_ver=None
-        prec_hor=None
+        prec_ver = None
+        prec_hor = None
         for pair in line.split(" -> "):
-            ver,hor=map(int,pair.split(","))
+            ver, hor = map(int, pair.split(","))
             if prec_ver is not None:
-                if ver>prec_ver:
-                    punti=((y,hor) for y in range(prec_ver,ver+1))
-                elif ver<prec_ver:
-                    punti=((y,hor) for y in range(ver,prec_ver))
-                elif hor>prec_hor:
-                    punti=((ver,x) for x in range(prec_hor,hor+1))
+                if ver > prec_ver:
+                    punti = ((y, hor) for y in range(prec_ver, ver + 1))
+                elif ver < prec_ver:
+                    punti = ((y, hor) for y in range(ver, prec_ver + 1))
+                elif hor > prec_hor:
+                    punti = ((ver, x) for x in range(prec_hor, hor + 1))
                 else:
-                    punti=((ver,x) for x in range(hor,prec_hor))
-                prec_hor=hor
-                prec_ver=ver
+                    punti = ((ver, x) for x in range(hor, prec_hor + 1))
+                prec_hor = hor
+                prec_ver = ver
             else:
-                prec_hor=hor
-                prec_ver=ver
+                prec_hor = hor
+                prec_ver = ver
                 continue
 
-            for v,h in punti:
-                if v not in cave:
-                    cave[v]=[h]
-                else:
-                    cave[v].append(h)
-    return cave
+            for v, h in punti:
+                if h > max:
+                    max = h
+                cave.add((v, h))
+    return cave, max
 
-def main(input: str) -> int:
-    cave= parse_cave(input)
 
-    falling=True
-    count=-1
-    while falling:
-        count+=1
-        sandx,sandy=500,0
+def main(input):
+    cave, max = parse_cave(input)
+    max = max + 2
+
+    def is_free(x, y):
+        return (y < max) and (x, y) not in cave
+
+    count = 0
+    while is_free(500,0):
+        count += 1
+        sandx, sandy = 500, 0
         while True:
-            try:
-                obstacle=min(filter(lambda x: x>sandy,cave[sandx]))
-            except:
-                falling=False
-                break
+            if is_free(sandx, sandy + 1):  # down
+                sandy += 1
 
-            sandy=obstacle-1
-            try:
-                if (sandy+1) not in cave[sandx-1]:
-                    sandx=sandx-1
-                    sandy=sandy+1
-                
-                elif (sandy+1) not in cave[sandx+1]:
-                    sandx=sandx+1
-                    sandy=sandy+1
+            elif is_free(sandx - 1, sandy + 1):  # left
+                sandx -= 1
 
-                else:
-                    cave[sandx].append(sandy)
-                    break
-                    
-            except:
-                falling=False
+            elif is_free(sandx + 1, sandy + 1):  # right
+                sandx += 1
+
+            else:  # stopping here
+                cave.add((sandx, sandy))
                 break
     return count
 
