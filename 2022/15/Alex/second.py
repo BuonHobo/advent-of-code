@@ -93,7 +93,7 @@ def main(input):
 
     for i in range(4000000):
         if len(pos:=unavailable_positions(i,sensors))>1:
-            print(i,pos, pos[-1][0]-1,(pos[-1][0]-1)*4000000,(pos[-1][0]-1)*4000000+i)
+            return (pos[-1][0]-1)*4000000+i
 
 
 if __name__ == "__main__":
