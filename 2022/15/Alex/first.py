@@ -56,7 +56,7 @@ class exc_range:
         self.rngs = res
 
 
-def parse(string: str) -> tuple[list[sensor], int, int]:
+def parse(string: str):
     res: list[sensor] = []
     for line in string.splitlines():
         first, second = line.split(": ")
@@ -72,7 +72,7 @@ def parse(string: str) -> tuple[list[sensor], int, int]:
     return res
 
 
-def unavailable_positions(y: int, sensors: list[sensor]) -> exc_range:
+def unavailable_positions(y: int, sensors: list[sensor]) -> list[tuple[int,int]]:
     res: exc_range = exc_range()
     occupied: list[int] = []
 

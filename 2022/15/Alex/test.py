@@ -1,15 +1,13 @@
 import itertools
 
 
-class sen:
+class sensor:
     def __init__(self, pos: tuple[int, int], beacon: tuple[int, int]) -> None:
         self.pos = pos
         self.beacon = beacon
         self.dist = abs(self.beacon[0] - self.pos[0]) + abs(
             self.beacon[1] - self.pos[1]
         )
-    def __repr__(self) -> str:
-        return f"{self.pos},{self.dist}"
 
 
 def overlaps(range1: tuple[int, int], range2: tuple[int, int]) -> bool:
@@ -58,8 +56,8 @@ class exc_range:
         self.rngs = res
 
 
-def parse(string: str) -> list[sen]:
-    res: list[sen] = []
+def parse(string: str) -> list[sensor]:
+    res: list[sensor] = []
     for line in string.splitlines():
         first, second = line.split(": ")
         x, y = first[12:].split(", ")
@@ -69,12 +67,12 @@ def parse(string: str) -> list[sen]:
         bx, by = second[23:].split(", ")
         bx = int(bx)
         by = int(by[2:])
-        res.append(sen((x, y), (bx, by)))
+        res.append(sensor((x, y), (bx, by)))
 
     return res
 
 
-def unavailable_positions(y: int, sensors: list[sen],mx=4000000) -> list[tuple[int, int]]:
+def unavailable_positions(y: int, sensors: list[sensor]) -> list[tuple[int,int]]:
     res: exc_range = exc_range()
 
     for sensor in sensors:
@@ -82,59 +80,24 @@ def unavailable_positions(y: int, sensors: list[sen],mx=4000000) -> list[tuple[i
         if distance <= 0:
             continue
         start = sensor.pos[0] - distance
-        start = max(start, 0)
+        start=max(start,0)
         stop = sensor.pos[0] + distance
-        stop = min(stop, mx)
+        stop=min(stop,4000000)
         res.add(start, stop)
 
     return res.rngs
 
 
 def main(input):
-    mx=4000000
     sensors = parse(input)
-    #sensors:list[sen]=[sen((4,3),(4,1))]
-    rette: dict[tuple[bool, int], int] = {}
 
-    for sensor in sensors:
-        r1 = (True,  sensor.pos[1] - sensor.dist - 1 - sensor.pos[0])  # top rising
-        r2 = (False, sensor.pos[1] - sensor.dist - 1 + sensor.pos[0])  # top descending
-        r3 = (True,  sensor.pos[1] + sensor.dist + 1 - sensor.pos[0])  # bot rising
-        r4 = (False, sensor.pos[1] + sensor.dist + 1 + sensor.pos[0])  # bot descending
-
-        for r in [r1,r2,r3,r4]:
-            if r in rette:
-                rette[r]+=1
-            else:
-                rette[r]=1
-
-    up=[]
-    down=[]
-
-    for r,c in rette.items():
-        if c>1:
-            if r[0]:
-                down.append(r)
-            else:
-                up.append(r)
-    punti=[]
-
-    for ru in up:
-        for rd in down:
-            punto=(ru[1]-rd[1])//2
-            punto=(punto,punto+rd[1])
-            punti.append(punto)
-
-    for punto in punti:
-        if punto[1] not in range(0,mx):
-            continue
-        if len(pos:=unavailable_positions(punto[1],sensors,mx))>1 and pos[0][1]+1!=pos[1][0]:
-            return (pos[-1][0]-1)*4000000+punto[1]
-
-    print(down,up)
+    for i in range(4000000):
+        if len(pos:=unavailable_positions(i,sensors))>1:
+            return (pos[-1][0]-1)*4000000+i
 
 
 if __name__ == "__main__":
     with open("input.txt") as f:
         input = f.read()
     print(main(input))
+
