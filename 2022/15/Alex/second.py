@@ -1,84 +1,150 @@
-import itertools
-
-
-def man_dist(a, b):
+def man_dist(a: tuple[int, int], b: tuple[int, int]) -> int:
+    """Returns the Manhattan distance between two points"""
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 
-class sen:
+class sensor:
+    """A sensor has its center position and its exclusion range"""
+
     def __init__(self, pos: tuple[int, int], beacon: tuple[int, int]) -> None:
-        self.pos = pos
-        self.dist = man_dist(beacon, self.pos)
+        self.position: tuple[int, int] = pos
+        self.range: int = man_dist(beacon, self.position)
 
-    def in_exc_rng(self, point):
-        return self.dist >= man_dist(self.pos, point)
-
-    def __repr__(self) -> str:
-        return f"{self.pos},{self.dist}"
+    def in_exclusion_range(self, point: tuple[int, int]) -> bool:
+        """Returns True if point is inside this sensor's exclusion range"""
+        return self.range >= man_dist(self.position, point)
 
 
-def parse(string: str) -> list[sen]:
-    res: list[sen] = []
+def parse(string: str) -> list[sensor]:
+    """Parses the advent input and returns the list of sensors"""
+    result: list[sensor] = []
     for line in string.splitlines():
+        # line: "Sensor at x=2391367, y=3787759: closest beacon is at x=2345659, y=4354867"
         first, second = line.split(": ")
-        x, y = first[12:].split(", ")
-        x = int(x)
-        y = int(y[2:])
 
-        bx, by = second[23:].split(", ")
-        bx = int(bx)
-        by = int(by[2:])
-        res.append(sen((x, y), (bx, by)))
+        # first:  "Sensor at x=2391367, y=3787759"
+        sensor_x, sensor_y = first[12:].split(", ")
+        sensor_x = int(sensor_x)
+        sensor_y = int(sensor_y[2:])
 
-    return res
+        # second: "closest beacon is at x=2345659, y=4354867"
+        beacon_x, beacon_y = second[23:].split(", ")
+        beacon_x = int(beacon_x)
+        beacon_y = int(beacon_y[2:])
+
+        result.append(sensor((sensor_x, sensor_y), (beacon_x, beacon_y)))
+
+    return result
 
 
-def is_free(pos, sensors: list[sen]) -> bool:
+def is_free(point: tuple[int, int], sensors: list[sensor]) -> bool:
+    """Returns True if point is outside the exclusion range of every sensor in sensors"""
     for sensor in sensors:
-        if sensor.in_exc_rng(pos):
+        if sensor.in_exclusion_range(point):
             return False
     return True
 
 
-def main(input):
-    mx = 4000000
+def main(input: str) -> int:
+    search_area = 4000000  # This parameter was given by the problem. It's the area in which we are looking for the free point
     sensors = parse(input)
-    rette: dict[tuple[bool, int], int] = {}
+    lines: dict[tuple[bool, int], int] = {}
 
     for sensor in sensors:
-        r1 = (True, sensor.pos[1] - sensor.dist - 1 - sensor.pos[0])  # top rising
-        r2 = (False, sensor.pos[1] - sensor.dist - 1 + sensor.pos[0])  # top descending
-        r3 = (True, sensor.pos[1] + sensor.dist + 1 - sensor.pos[0])  # bot rising
-        r4 = (False, sensor.pos[1] + sensor.dist + 1 + sensor.pos[0])  # bot descending
+        r"""
+        This section calculates all of the lines that pass along the confines of each sensor's exclusion zone.
+        A line is defined as y=mx+q where m is either 1 or -1.
 
-        for r in [r1, r2, r3, r4]:
-            if r in rette:
-                rette[r] += 1
+                \top descending
+                 \
+                  \     /top rising
+                   \   /
+                    \ /
+                     \
+                    / \
+                   / - \
+                  / / \ \
+                 / /   \ \
+        \       / /     \ \
+         \     / /       \ \     /bottom rising
+          \   / /         \ \   /
+           \ / /           \ \ /
+            \ -      +      - /
+           / \ \           / / \
+          /   \ \         / /   \
+         /     \ \       / /     \
+        /       \ \     / /
+                 \ \   / /
+                  \ \ / /
+                   \ - /
+                    \ /
+                     /
+                    / \
+                   /   \bottom descending
+        """
+
+        top_rising = (
+            True,  # m is 1
+            sensor.position[1] - sensor.range - 1 - sensor.position[0],  # this is q
+        )
+
+        top_descending = (
+            False,  # m is -1
+            sensor.position[1] - sensor.range - 1 + sensor.position[0],
+        )
+
+        bottom_rising = (
+            True,
+            sensor.position[1] + sensor.range + 1 - sensor.position[0],
+        )
+
+        bottom_descending = (
+            False,
+            sensor.position[1] + sensor.range + 1 + sensor.position[0],
+        )
+
+        for line in [top_rising, top_descending, bottom_rising, bottom_descending]:
+            """I'm counting the occurrences of each line"""
+            if line in lines:
+                lines[line] += 1
             else:
-                rette[r] = 1
+                lines[line] = 1
 
-    up = []
-    down = []
+    rising_lines: list[int] = []
+    descending_lines: list[int] = []
 
-    for r, c in rette.items():
-        if c > 1:
-            if r[0]:
-                down.append(r)
+    for line, count in lines.items():
+        """
+        I only keep the lines that appear at least two times.
+        I do this because I know that the single free spot lies where 4 lines intersect
+        (2 rising and 2 descending)
+        """
+        if count > 1:
+            if line[0]:
+                descending_lines.append(line[1])
             else:
-                up.append(r)
-    points = []
+                rising_lines.append(line[1])
 
-    for ru in up:
-        for rd in down:
-            point = (ru[1] - rd[1]) // 2
-            point = (point, point + rd[1])
+    points: list[tuple[int, int]] = []
+
+    for rising_q in rising_lines:
+        for descending_q in descending_lines:
+            """I calculate the intersections between all the rising and descending lines i got"""
+            x = (rising_q - descending_q) // 2
+            y = x + descending_q
+            point = (x, y)
             points.append(point)
 
     for point in points:
-        if point[1] not in range(0, mx) or point[0] not in range(0, mx):
-            continue
-        if is_free(point, sensors):
+        """I check which of the intersections is the free point"""
+        if (
+            (0 <= point[1] <= search_area)
+            and (0 <= point[0] <= search_area)
+            and is_free(point, sensors)
+        ):
             return point[0] * 4000000 + point[1]
+
+    raise ValueError  # If the point is not found then the input is wrong
 
 
 if __name__ == "__main__":
