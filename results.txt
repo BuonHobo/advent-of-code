@@ -4,62 +4,62 @@
 Year 2022:
 
        Day 1:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000373 ] [ 0.000375 ]
+        Alex:  [ 0.000369 ] [ 0.000379 ]
      Winners:  [   Alex   ] [   Alex   ]
 
        Day 2:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000840 ] [ 0.000759 ]
+        Alex:  [ 0.000786 ] [ 0.000579 ]
      Winners:  [   Alex   ] [   Alex   ]
 
        Day 3:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000640 ] [ 0.000431 ]
+        Alex:  [ 0.000561 ] [ 0.000432 ]
      Winners:  [   Alex   ] [   Alex   ]
 
        Day 4:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.001694 ] [ 0.001674 ]
+        Alex:  [ 0.001707 ] [ 0.001669 ]
      Winners:  [   Alex   ] [   Alex   ]
 
        Day 5:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000564 ] [ 0.000466 ]
+        Alex:  [ 0.000560 ] [ 0.000475 ]
      Winners:  [   Alex   ] [   Alex   ]
 
        Day 8:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.014390 ] [ 0.016254 ]
+        Alex:  [ 0.014409 ] [ 0.016441 ]
      Winners:  [   Alex   ] [   Alex   ]
 
        Day 6:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000424 ] [ 0.001013 ]
+        Alex:  [ 0.000429 ] [ 0.001004 ]
      Winners:  [   Alex   ] [   Alex   ]
 
        Day 7:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.001082 ] [ 0.001140 ]
+        Alex:  [ 0.001078 ] [ 0.001144 ]
      Winners:  [   Alex   ] [   Alex   ]
 
        Day 9:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.004433 ] [ 0.023899 ]
+        Alex:  [ 0.004418 ] [ 0.023914 ]
      Winners:  [   Alex   ] [   Alex   ]
 
       Day 10:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000045 ] [ 0.000103 ]
+        Alex:  [ 0.000047 ] [ 0.000105 ]
      Winners:  [   Alex   ] [   Alex   ]
 
       Day 11:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000810 ] [ 0.306127 ]
+        Alex:  [ 0.000822 ] [ 0.302401 ]
      Winners:  [   Alex   ] [   Alex   ]
 
       Day 12:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.022434 ] [ 0.011721 ]
+        Alex:  [ 0.020383 ] [ 0.011371 ]
      Winners:  [   Alex   ] [   Alex   ]
 
       Day 13:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.013155 ] [ 0.015559 ]
+        Alex:  [ 0.013303 ] [ 0.016071 ]
      Winners:  [   Alex   ] [   Alex   ]
 
       Day 14:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.003825 ] [ 0.005536 ]
+        Alex:  [ 0.003906 ] [ 0.005542 ]
      Winners:  [   Alex   ] [   Alex   ]
 
       Day 15:  [  PART 1  ] [  PART 2  ]
-        Alex:  [ 0.000065 ] [ 0.000164 ]
+        Alex:  [ 0.000065 ] [ 0.000081 ]
      Winners:  [   Alex   ] [   Alex   ]
 

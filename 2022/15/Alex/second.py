@@ -1,61 +1,20 @@
 import itertools
 
 
+def man_dist(a, b):
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+
 class sen:
     def __init__(self, pos: tuple[int, int], beacon: tuple[int, int]) -> None:
         self.pos = pos
-        self.beacon = beacon
-        self.dist = abs(self.beacon[0] - self.pos[0]) + abs(
-            self.beacon[1] - self.pos[1]
-        )
+        self.dist = man_dist(beacon, self.pos)
+
+    def in_exc_rng(self, point):
+        return self.dist >= man_dist(self.pos, point)
+
     def __repr__(self) -> str:
         return f"{self.pos},{self.dist}"
-
-
-def overlaps(range1: tuple[int, int], range2: tuple[int, int]) -> bool:
-    return (
-        range2[0] <= range1[0] <= range2[1]
-        or range2[0] <= range1[0] <= range2[1]
-        or range1[0] <= range2[0] <= range1[1]
-        or range1[0] <= range2[0] <= range1[1]
-    )
-
-
-class exc_range:
-    def __init__(self) -> None:
-        self.rngs = []
-
-    def add(self, start, stop) -> None:
-        res: list[tuple[int, int]] = []
-        additional: list[tuple[int, int]] = []
-        for rngs, rnge in self.rngs:
-            if overlaps((rngs, rnge), (start, stop)):
-                additional.append((min(start, rngs), max(stop, rnge)))
-            else:
-                res.append((rngs, rnge))
-
-        if len(additional) >= 1:
-            mins = min(map(lambda tup: tup[0], additional))
-            maxe = max(map(lambda tup: tup[1], additional))
-            res.append((mins, maxe))
-        else:
-            res.append((start, stop))
-
-        self.rngs = res
-
-    def rem(self, point) -> None:
-        res: list[tuple[int, int]] = []
-        for rngs, rnge in self.rngs:
-            if rngs < point < rnge:
-                res.append((rngs, point - 1))
-                res.append((point + 1, rnge))
-            elif point == rngs:
-                res.append((point + 1, rnge))
-            elif point == rnge:
-                res.append((rngs, point - 1))
-            else:
-                res.append((rngs, rnge))
-        self.rngs = res
 
 
 def parse(string: str) -> list[sen]:
@@ -74,64 +33,52 @@ def parse(string: str) -> list[sen]:
     return res
 
 
-def unavailable_positions(y: int, sensors: list[sen],mx=4000000) -> list[tuple[int, int]]:
-    res: exc_range = exc_range()
-
+def is_free(pos, sensors: list[sen]) -> bool:
     for sensor in sensors:
-        distance = sensor.dist - abs(y - sensor.pos[1])
-        if distance <= 0:
-            continue
-        start = sensor.pos[0] - distance
-        start = max(start, 0)
-        stop = sensor.pos[0] + distance
-        stop = min(stop, mx)
-        res.add(start, stop)
-
-    return res.rngs
+        if sensor.in_exc_rng(pos):
+            return False
+    return True
 
 
 def main(input):
-    mx=4000000
+    mx = 4000000
     sensors = parse(input)
-    #sensors:list[sen]=[sen((4,3),(4,1))]
     rette: dict[tuple[bool, int], int] = {}
 
     for sensor in sensors:
-        r1 = (True,  sensor.pos[1] - sensor.dist - 1 - sensor.pos[0])  # top rising
+        r1 = (True, sensor.pos[1] - sensor.dist - 1 - sensor.pos[0])  # top rising
         r2 = (False, sensor.pos[1] - sensor.dist - 1 + sensor.pos[0])  # top descending
-        r3 = (True,  sensor.pos[1] + sensor.dist + 1 - sensor.pos[0])  # bot rising
+        r3 = (True, sensor.pos[1] + sensor.dist + 1 - sensor.pos[0])  # bot rising
         r4 = (False, sensor.pos[1] + sensor.dist + 1 + sensor.pos[0])  # bot descending
 
-        for r in [r1,r2,r3,r4]:
+        for r in [r1, r2, r3, r4]:
             if r in rette:
-                rette[r]+=1
+                rette[r] += 1
             else:
-                rette[r]=1
+                rette[r] = 1
 
-    up=[]
-    down=[]
+    up = []
+    down = []
 
-    for r,c in rette.items():
-        if c>1:
+    for r, c in rette.items():
+        if c > 1:
             if r[0]:
                 down.append(r)
             else:
                 up.append(r)
-    punti=[]
+    points = []
 
     for ru in up:
         for rd in down:
-            punto=(ru[1]-rd[1])//2
-            punto=(punto,punto+rd[1])
-            punti.append(punto)
+            point = (ru[1] - rd[1]) // 2
+            point = (point, point + rd[1])
+            points.append(point)
 
-    for punto in punti:
-        if punto[1] not in range(0,mx):
+    for point in points:
+        if point[1] not in range(0, mx) or point[0] not in range(0, mx):
             continue
-        if len(pos:=unavailable_positions(punto[1],sensors,mx))>1 and pos[0][1]+1!=pos[1][0]:
-            return (pos[-1][0]-1)*4000000+punto[1]
-
-    print(down,up)
+        if is_free(point, sensors):
+            return point[0] * 4000000 + point[1]
 
 
 if __name__ == "__main__":
