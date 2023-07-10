@@ -56,7 +56,7 @@ class exc_range:
         self.rngs = res
 
 
-def parse(string: str):
+def parse_beacons(string: str):
     res: list[sensor] = []
     for line in string.splitlines():
         first, second = line.split(": ")
@@ -95,7 +95,7 @@ def unavailable_positions(y: int, sensors: list[sensor]) -> list[tuple[int,int]]
 
 
 def main(input):
-    sensors = parse(input)
+    sensors = parse_beacons(input)
     count = 0
     for start, stop in unavailable_positions(2000000, sensors):
         count += stop - start + 1
