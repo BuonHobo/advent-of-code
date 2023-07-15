@@ -56,7 +56,7 @@ def compress(matrix: list[list[int]], flows: list[int], entry: int):
 
 
 def find_solution(
-    all_valves: int,
+    all_targets: int,
     matrix: list[list[int]],
     flows: list[int],
     open_valves: int,
@@ -64,29 +64,34 @@ def find_solution(
     time_left: int,
     cache: dict[tuple[int, int, int], int],
 ) -> int:
+    
     if (open_valves, current_valve, time_left) in cache:
         return cache[(open_valves, current_valve, time_left)]
 
-    targets = all_valves & ~open_valves
-    counter = 0
     best = 0
+    remaining_targets = all_targets
 
-    while (targets >> counter) != 0:
-        target = targets & (1 << counter)
-        if target != 0 and time_left > matrix[current_valve][counter]:
-            tmp = find_solution(
-                all_valves,
-                matrix,
-                flows,
-                open_valves | target,
-                counter,
-                time_left - 1 - matrix[current_valve][counter],
-                cache,
+    while remaining_targets > 0:
+        # isolate rightmost bit of targets
+        target = remaining_targets & -remaining_targets
+        # remove rightmost bit of targets
+        remaining_targets ^= target
+        # get counter out of target
+        counter = target.bit_length() - 1
+
+        if time_left > matrix[current_valve][counter]:
+            best = max(
+                best,
+                find_solution(
+                    all_targets & ~target,
+                    matrix,
+                    flows,
+                    open_valves | target,
+                    counter,
+                    time_left - 1 - matrix[current_valve][counter],
+                    cache,
+                ),
             )
-            if best < tmp:
-                best = tmp
-
-        counter += 1
 
     best += flows[current_valve] * time_left
     cache[(open_valves, current_valve, time_left)] = best
@@ -105,9 +110,11 @@ def main(input: str):
     while human_valves < (1 << len(matrix)):
         best = max(
             best,
-            find_solution(all_valves, matrix, flows, human_valves, entry, 26, cache)
+            find_solution(
+                all_valves ^ human_valves, matrix, flows, human_valves, entry, 26, cache
+            )
             + find_solution(
-                all_valves, matrix, flows, human_valves ^ all_valves, entry, 26, cache
+                human_valves, matrix, flows, human_valves ^ all_valves, entry, 26, cache
             ),
         )
 
