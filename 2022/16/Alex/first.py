@@ -63,9 +63,32 @@ def find_solution(
     current_valve: int,
     time_left: int,
     cache: dict[tuple[int, int, int], int],
+    current_best: list[int],
+    pressure: int,
 ) -> int:
     if (open_valves, current_valve, time_left) in cache:
         return cache[(open_valves, current_valve, time_left)]
+
+    released_pressure = flows[current_valve] * time_left
+    
+    theoretical_max = pressure + released_pressure
+    remaining_targets = all_targets
+
+    while remaining_targets > 0:
+        # isolate rightmost bit of targets
+        target = remaining_targets & -remaining_targets
+        # remove rightmost bit of targets
+        remaining_targets ^= target
+        # get counter out of target
+        counter = target.bit_length() - 1
+
+        if time_left > matrix[current_valve][counter]:
+            theoretical_max += flows[counter] * (
+                time_left - matrix[current_valve][counter] - 1
+            )
+
+    if theoretical_max < current_best[0]:
+        return released_pressure
 
     best = 0
     remaining_targets = all_targets
@@ -87,12 +110,15 @@ def find_solution(
                     flows,
                     open_valves | target,
                     counter,
-                    time_left - 1 - matrix[current_valve][counter],
+                    time_left - matrix[current_valve][counter] -1,
                     cache,
+                    current_best,
+                    pressure + released_pressure,
                 ),
             )
 
-    best += flows[current_valve] * time_left
+    best += released_pressure
+    current_best[0]= max(best, current_best[0])
     cache[(open_valves, current_valve, time_left)] = best
     return best
 
@@ -101,9 +127,9 @@ def main(input: str):
     matrix, flows, entry = parse_valves(input)
     floyd_warshall(matrix)
     entry = compress(matrix, flows, entry)
-
+    cache: dict[tuple[int, int, int], int] = {}
     return find_solution(
-        (1 << len(matrix)) - 1, matrix, flows, 1 << entry, entry, 30, {}
+        (1 << len(matrix)) - 1, matrix, flows, 1 << entry, entry, 30, cache, [0], 0
     )
 
 
