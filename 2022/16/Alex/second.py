@@ -98,9 +98,27 @@ def main(input: str):
     floyd_warshall(matrix)
     entry = compress(matrix, flows, entry)
     cache = {}
-    return find_solution(
-        (1 << len(matrix)) - 1, matrix, flows, 1 << entry, entry, 30, cache
-    )
+
+    all_valves = (1 << len(matrix)) - 1
+    human_valves = (1 << (len(matrix) // 2)) - 1
+    best = 0
+    while human_valves < (1 << len(matrix)):
+        best = max(
+            best,
+            find_solution(all_valves, matrix, flows, human_valves, entry, 26, cache)
+            + find_solution(
+                all_valves, matrix, flows, human_valves ^ all_valves, entry, 26, cache
+            ),
+        )
+
+        # determine next mask with Gosper's hack
+        a = human_valves & -human_valves  # determine rightmost 1 bit
+        b = human_valves + a  # determine carry bit
+        human_valves = (
+            int(((human_valves ^ b) >> 2) / a) | b
+        )  # produce block of ones that begins at the least-significant bit
+
+    return best
 
 
 if __name__ == "__main__":
