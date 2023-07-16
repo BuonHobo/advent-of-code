@@ -1,173 +1,71 @@
+import re
+
+
 def parse_valves(content: str):
-    split_lines = [line.split("; ") for line in content.splitlines()]
-    name_ids = {}
-    flows: list[int] = []
-    entry = 0
-
-    counter = 0
-    for first, _ in split_lines:
-        name, flow = first.replace("Valve ", "").replace("has flow rate=", "").split()
-        if name == "AA":
-            entry = counter
-        name_ids[name] = counter
-        flows.append(int(flow))
-        counter += 1
-
-    matrix = [[1000 for _ in range(len(flows))] for _ in range(len(flows))]
-    for i in range(len(flows)):
-        matrix[i][i] = 0
-
-    counter = 0
-    for _, second in split_lines:
-        str_targets = (
-            second.removeprefix("tunnels lead to valves ")
-            .removeprefix("tunnel leads to valve ")
-            .split(", ")
+    structured_data: dict[str, tuple[int, list[str]]] = {
+        line[0]: (int(line[1]), line[2:])
+        for line in (
+            re.findall(r"[A-Z]+|\d+", line[1:]) for line in content.splitlines()
         )
-        int_targets: list[int] = [name_ids[name] for name in str_targets]
-        for target in int_targets:
-            matrix[counter][target] = 1
-        counter += 1
-
-    return matrix, flows, entry
-
-
-def floyd_warshall(matrix: list[list[int]]):
-    for k in range(len(matrix)):
-        for i in range(len(matrix)):
-            for j in range(len(matrix)):
-                if matrix[i][k] + matrix[k][j] < matrix[i][j]:
-                    matrix[i][j] = matrix[i][k] + matrix[k][j]
-
-
-def compress(matrix: list[list[int]], flows: list[int], entry: int):
-    valve = 0
-    while valve < len(flows):
-        if flows[valve] == 0 and valve != entry:
-            if valve < entry:
-                entry -= 1
-            flows.pop(valve)
-            matrix.pop(valve)
-            for row in matrix:
-                row.pop(valve)
-        else:
-            valve += 1
-    return entry
-
-
-def find_solution(
-    all_targets: int,
-    matrix: list[list[int]],
-    flows: list[int],
-    open_valves: int,
-    current_valve: int,
-    time_left: int,
-    cache: dict[tuple[int, int, int], int],
-    current_best: list[int],
-    pressure: int,
-) -> int:
-    if (open_valves, current_valve, time_left) in cache:
-        return cache[(open_valves, current_valve, time_left)]
-
-    released_pressure = flows[current_valve] * time_left
-
-    theoretical_max = pressure + released_pressure
-    remaining_targets = all_targets
-
-    # Calculate theoretical max
-    while remaining_targets > 0:
-        # isolate rightmost bit of targets
-        target = remaining_targets & -remaining_targets
-        # remove rightmost bit of targets
-        remaining_targets ^= target
-        # get counter out of target
-        counter = target.bit_length() - 1
-
-        if time_left > matrix[current_valve][counter]:
-            theoretical_max += flows[counter] * (
-                time_left - matrix[current_valve][counter] - 1
-            )
-    # If theoretical max is bad, then just open this valve without going further
-    if theoretical_max < current_best[0]:
-        return released_pressure
-
-    best = 0
-    remaining_targets = all_targets
-
-    while remaining_targets > 0:
-        # isolate rightmost bit of targets
-        target = remaining_targets & -remaining_targets
-        # remove rightmost bit of targets
-        remaining_targets ^= target
-        # get counter out of target
-        counter = target.bit_length() - 1
-
-        if time_left > matrix[current_valve][counter]:
-            best = max(
-                best,
-                find_solution(
-                    all_targets & ~target,
-                    matrix,
-                    flows,
-                    open_valves | target,
-                    counter,
-                    time_left - matrix[current_valve][counter] - 1,
-                    cache,
-                    current_best,
-                    pressure + released_pressure,
-                ),
-            )
-
-    best += released_pressure
-    current_best[0] = max(best, current_best[0])
-    cache[(open_valves, current_valve, time_left)] = best
-    return best
+    }
+    return structured_data
 
 
 def main(input: str):
-    matrix, flows, entry = parse_valves(input)
-    floyd_warshall(matrix)
-    entry = compress(matrix, flows, entry)
-    cache = {}
+    # get structured data: {NAME: flow,neighbours}
+    data = parse_valves(input)
 
-    all_valves = (1 << len(matrix)) - 1
-    human_valves = (1 << (len(matrix) // 2)) - 1
-    best = 0
-    while human_valves < (1 << len(matrix)):
-        best = max(
-            best,
-            find_solution(
-                all_valves ^ human_valves,
-                matrix,
-                flows,
-                human_valves,
-                entry,
-                26,
-                cache,
-                [0],
-                0,
+    # connect different valves
+    distances: dict[tuple[str, str], int] = {
+        (src, dst): 1 for src in data for dst in data if dst in data[src][1]
+    }
+
+    # store flows in a dict
+    flows: dict[str, int] = {
+        valve: flow for valve, (flow, _) in data.items() if flow != 0
+    }
+
+    bits: dict[str, int] = {valve: 1 << index for index, valve in enumerate(flows)}
+
+    # floyd warshall to calculate distances
+    for k in data:
+        for i in data:
+            for j in data:
+                distances[i, j] = min(
+                    distances.get((i, j), 1000),
+                    distances.get((i, k), 1000) + distances.get((k, j), 1000),
+                )
+
+    def visit(
+        valve: str,
+        minutes: int,
+        bitmask: int,
+        pressure: int,
+        answer: dict[int, int] = {},
+    ):
+        answer[bitmask] = max(answer.get(bitmask, 0), pressure)
+        for valve2, flow in flows.items():
+            remaining_minutes = minutes - distances[valve, valve2] - 1
+            if remaining_minutes <= 0 or bits[valve2] & bitmask:
+                continue
+            visit(
+                valve2,
+                remaining_minutes,
+                bitmask | bits[valve2],
+                pressure + flow * remaining_minutes,
+                answer,
             )
-            + find_solution(
-                human_valves,
-                matrix,
-                flows,
-                human_valves ^ all_valves,
-                entry,
-                26,
-                cache,
-                [0],
-                0,
-            ),
-        )
+        return answer
 
-        # determine next mask with Gosper's hack
-        a = human_valves & -human_valves  # determine rightmost 1 bit
-        b = human_valves + a  # determine carry bit
-        human_valves = (
-            int(((human_valves ^ b) >> 2) / a) | b
-        )  # produce block of ones that begins at the least-significant bit
+    visited2 = visit("AA", 26, 0, 0, {})
+    part2 = max(
+        v1 + v2
+        for bitm1, v1 in visited2.items()
+        for bitm2, v2 in visited2.items()
+        if not bitm1 & bitm2
+    )
 
-    return best
+    return part2
 
 
 if __name__ == "__main__":

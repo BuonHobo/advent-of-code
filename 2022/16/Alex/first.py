@@ -62,15 +62,15 @@ def find_solution(
     open_valves: int,
     current_valve: int,
     time_left: int,
-    cache: dict[tuple[int, int, int], int],
-    current_best: list[int],
-    pressure: int,
+    cache: dict[tuple[int, int, int], int] = {},
+    current_best: list[int] = [0],
+    pressure: int = 0,
 ) -> int:
     if (open_valves, current_valve, time_left) in cache:
         return cache[(open_valves, current_valve, time_left)]
 
     released_pressure = flows[current_valve] * time_left
-    
+
     theoretical_max = pressure + released_pressure
     remaining_targets = all_targets
 
@@ -110,7 +110,7 @@ def find_solution(
                     flows,
                     open_valves | target,
                     counter,
-                    time_left - matrix[current_valve][counter] -1,
+                    time_left - matrix[current_valve][counter] - 1,
                     cache,
                     current_best,
                     pressure + released_pressure,
@@ -118,7 +118,7 @@ def find_solution(
             )
 
     best += released_pressure
-    current_best[0]= max(best, current_best[0])
+    current_best[0] = max(best, current_best[0])
     cache[(open_valves, current_valve, time_left)] = best
     return best
 
@@ -127,9 +127,13 @@ def main(input: str):
     matrix, flows, entry = parse_valves(input)
     floyd_warshall(matrix)
     entry = compress(matrix, flows, entry)
-    cache: dict[tuple[int, int, int], int] = {}
     return find_solution(
-        (1 << len(matrix)) - 1, matrix, flows, 1 << entry, entry, 30, cache, [0], 0
+        ((1 << len(matrix)) - 1) & ~(1 << entry),
+        matrix,
+        flows,
+        1 << entry,
+        entry,
+        30,
     )
 
 
